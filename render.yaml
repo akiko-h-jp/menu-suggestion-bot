@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: dify-line-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn line_webhook:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DIFY_API_KEY
+        sync: false
+      - key: DIFY_BASE_URL
+        value: https://api.dify.ai/v1
+      - key: LINE_CHANNEL_ACCESS_TOKEN
+        sync: false
+      - key: LINE_CHANNEL_SECRET
+        sync: false
+      - key: PORT
+        fromService:
+          type: web
+          name: dify-line-bot
+          property: port
+
